@@ -8,5 +8,6 @@ if(APPLE)
     link_directories(/usr/local/lib)
 endif()
 
-include_directories(include)
+find_package(ccore 1.3 REQUIRED)
 add_subdirectory(src)
+add_subdirectory(example)

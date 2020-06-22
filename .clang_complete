@@ -1,4 +1,5 @@
 -Iinclude
+-I/usr/include/SDL2
 -Wall
 -Wextra
 -Wpedantic

@@ -7,13 +7,14 @@
 // =^•.•^=
 //===--------------------------------------------------------------------------------------------===
 #pragma once
+#include <tsr/geometry.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct tsr_surface_t tsr_surface_t;
+typedef struct tsr_surface_s tsr_surface_t;
 
 /// Creates a new surface of [width] x [height] pixels.
 tsr_surface_t *tsr_surface_new(uint32_t width, uint32_t height);
@@ -27,8 +28,11 @@ tsr_surface_t *tsr_surface_copy(uint32_t width, uint32_t height, const uint8_t *
 /// Deletes a surface's image memory.
 void tsr_surface_delete(tsr_surface_t *surface);
 
+/// Returns a vector containing the dimensions of a surface.
+tsr_vec2_t tsr_surface_size(const tsr_surface_t *surface);
+
 /// Returns a pointer to the pixel store of a surface.
-const uint8_t *tsr_surface_pixels(tsr_surface_t *surface);
+const uint8_t *tsr_surface_pixels(const tsr_surface_t *surface);
 
 #ifdef __cplusplus
 } /* extern "C" */

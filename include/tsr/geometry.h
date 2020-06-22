@@ -15,11 +15,17 @@ extern "C" {
 /// A integer-valued, 2-dimension vector.
 typedef struct tsr_vec2_s { int x, y; } tsr_vec2_t;
 
+/// A float valued, RGBA color.
+typedef struct tsr_colorf_s {float r, g, b, a; } tsr_colorf_t;
+
 /// A integer-valued, axis-aligned rectangle.
 typedef struct tsr_rect_s { tsr_vec2_t origin; tsr_vec2_t size; } tsr_rect_t;
 
-static inline tsr_vec2_t tsr_vec2(int x, int y) { return (tsr_vec2_t){x, y}; };
+static inline tsr_vec2_t tsr_vec2(int x, int y) { return (tsr_vec2_t){x, y}; }
 static inline tsr_rect_t tsr_rect(tsr_vec2_t o, tsr_vec2_t s) { return (tsr_rect_t){o, s}; }
+static inline tsr_colorf_t tsr_colorf(float r, float g, float b, float a) {
+    return (tsr_colorf_t){r, g, b, a};
+}
 
 static inline tsr_vec2_t tsr_add_vv(tsr_vec2_t a, tsr_vec2_t b) {
     return tsr_vec2(a.x + b.x, a.y + b.y);
