@@ -56,6 +56,7 @@ int main() {
     tsr_rect_t character = tsr_rect(tsr_vec2(12, 0), tsr_vec2(12, 18));
     tsr_color(target, 0, 0, 0, 1);
     tsr_clear(target);
+    tsr_color(target, 1, 0, 1, 1);
     tsr_blit_region(target, font, tsr_vec2(20, 20), character);
 
     debug_tsr(buffer);

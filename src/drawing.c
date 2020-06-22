@@ -41,15 +41,15 @@ void tsr_clear(tsr_target_t *target) {
     }
 }
 
-static inline void blend(const uint8_t *src, uint8_t *dst) {
+static inline void blend(const tsr_colorf_t *col, const uint8_t *src, uint8_t *dst) {
     if(!src[3]) return;
-    const float src_a = (float)src[3] / 255.f;
+    const float src_a = col->a * (float)src[3] / 255.f;
     const float dst_a = (float)dst[3] / 255.f;
     const float one_minus_src_a = 1.f - src_a;
 
-    dst[0] = min_i32(src_a * src[0] + dst[0] * one_minus_src_a, 255);
-    dst[1] = min_i32(src_a * src[1] + dst[1] * one_minus_src_a, 255);
-    dst[2] = min_i32(src_a * src[2] + dst[2] * one_minus_src_a, 255);
+    dst[0] = min_i32(src_a * col->r * src[0] + dst[0] * one_minus_src_a, 255);
+    dst[1] = min_i32(src_a * col->g * src[1] + dst[1] * one_minus_src_a, 255);
+    dst[2] = min_i32(src_a * col->b * src[2] + dst[2] * one_minus_src_a, 255);
     dst[3] = 255 * clamp_f32(src_a + dst_a * one_minus_src_a, 0, 1.0);
 }
 
@@ -58,12 +58,7 @@ void tsr_rectangle(tsr_target_t *target, tsr_rect_t rect) {
     if(!target->color.a) return;
     uint8_t *pixels = target->surface->pixels;
 
-    uint8_t color[4] = {
-        target->color.r * 255,
-        target->color.g * 255,
-        target->color.b * 255,
-        target->color.a * 255,
-    };
+    uint8_t basic[4] = {255, 255, 255, 255};
 
     const tsr_vec2_t start = tsr_add_vv(target->position, rect.origin);
     const tsr_vec2_t end = tsr_add_vv(start, rect.size);
@@ -72,7 +67,7 @@ void tsr_rectangle(tsr_target_t *target, tsr_rect_t rect) {
     for(int x = max_i32(start.x, 0); x < min_i32(end.x, vp_size.x); ++x) {
         for(int y = max_i32(start.y, 0); y < min_i32(end.y, vp_size.y); ++y) {
             uint32_t i = y * target->surface->size.x + x;
-            blend(color, pixels + i);
+            blend(&target->color, basic, pixels + i);
         }
     }
 }
@@ -120,7 +115,7 @@ void tsr_blit_region(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos, t
         for(int y = 0; y < reg.size.y; ++y) {
             uint32_t src_i = (reg.origin.x + x) + (reg.origin.y + y) * img->size.x;
             uint32_t dst_i = (dest_start.x + x) + (dest_start.y + y) * surf_size.x;
-            blend(src + src_i * 4, dst + dst_i * 4);
+            blend(&target->color, src + src_i * 4, dst + dst_i * 4);
         }
     }
 }
