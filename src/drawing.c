@@ -81,14 +81,14 @@ void tsr_blit(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos) {
     CCASSERT(target);
     CCASSERT(img);
     tsr_rect_t region = tsr_rect(tsr_vec2(0, 0), img->size);
-    tsr_blit_region(target, img, pos, region);
+    tsr_blit_ex(target, img, pos, &region);
 }
 //
-void tsr_blit_region(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos, tsr_rect_t reg) {
+void tsr_blit_ex(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos, const tsr_rect_t *rp) {
     CCASSERT(target);
 
     tsr_vec2_t surf_size = target->surface->size;
-
+    tsr_rect_t reg = *rp;
     tsr_vec2_t dest_start = tsr_add_vv(target->position, pos);
     tsr_vec2_t end = tsr_add_vv(dest_start, reg.size);
 

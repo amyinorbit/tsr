@@ -27,8 +27,8 @@ void tsr_translate(tsr_target_t *target, int x, int y);
 void tsr_clear(tsr_target_t *target);
 void tsr_rectangle(tsr_target_t *target, tsr_rect_t r);
 void tsr_circle(tsr_target_t *target, tsr_vec2_t pos, int radius);
-void tsr_blit(tsr_target_t *target, tsr_surface_t *surface, tsr_vec2_t pos);
-void tsr_blit_region(tsr_target_t *target, tsr_surface_t *surface, tsr_vec2_t pos, tsr_rect_t reg);
+void tsr_blit(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos);
+void tsr_blit_ex(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos, const tsr_rect_t *reg);
 
 #ifdef __cplusplus
 } /* extern "C" */
