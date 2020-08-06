@@ -25,8 +25,11 @@ void tsr_blend(tsr_target_t *target, tsr_blend_mode_t mode);
 void tsr_color(tsr_target_t *target, float r, float g, float b, float a);
 void tsr_translate(tsr_target_t *target, int x, int y);
 void tsr_clear(tsr_target_t *target);
-void tsr_rectangle(tsr_target_t *target, tsr_rect_t r);
-void tsr_circle(tsr_target_t *target, tsr_vec2_t pos, int radius);
+void tsr_fill_box(tsr_target_t *target, const tsr_rect_t* r);
+void tsr_box(tsr_target_t *target, const tsr_rect_t *r, int thickness);
+void tsr_vline(tsr_target_t *target, int x, int y1, int y2, int thickness);
+void tsr_hline(tsr_target_t *target, int y, int x1, int x2, int thickness);
+
 void tsr_blit(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos);
 void tsr_blit_ex(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos, const tsr_rect_t *reg);
 

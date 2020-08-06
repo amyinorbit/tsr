@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(tsr
-    VERSION 1.0.0
+    VERSION 1.1.0
     DESCRIPTION "Tiny, inefficient and too-simple software renderer"
     HOMEPAGE_URL "https://github.com/amyinorbit/tsr"
     LANGUAGES C

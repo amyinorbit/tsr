@@ -9,6 +9,7 @@
 #include "tsr_private.h"
 #include <ccore/log.h>
 #include <ccore/math.h>
+#include <stdlib.h>
 
 void tsr_blend(tsr_target_t *target, tsr_blend_mode_t mode) {
     CCASSERT(target);
@@ -53,30 +54,64 @@ static inline void blend(const tsr_colorf_t *col, const uint8_t *src, uint8_t *d
     dst[3] = 255 * clamp_f32(src_a + dst_a * one_minus_src_a, 0, 1.0);
 }
 
-void tsr_rectangle(tsr_target_t *target, tsr_rect_t rect) {
+void tsr_fill_box(tsr_target_t *target, const tsr_rect_t *rect) {
     CCASSERT(target);
     if(!target->color.a) return;
     uint8_t *pixels = target->surface->pixels;
 
     uint8_t basic[4] = {255, 255, 255, 255};
 
-    const tsr_vec2_t start = tsr_add_vv(target->position, rect.origin);
-    const tsr_vec2_t end = tsr_add_vv(start, rect.size);
+    const tsr_vec2_t start = tsr_add_vv(target->position, rect->origin);
+    const tsr_vec2_t end = tsr_add_vv(start, rect->size);
     const tsr_vec2_t vp_size = target->surface->size;
 
     for(int x = max_i32(start.x, 0); x < min_i32(end.x, vp_size.x); ++x) {
         for(int y = max_i32(start.y, 0); y < min_i32(end.y, vp_size.y); ++y) {
             uint32_t i = y * target->surface->size.x + x;
-            blend(&target->color, basic, pixels + i);
+            blend(&target->color, basic, pixels + i * 4);
         }
     }
 }
 
-// void tsr_circle(tsr_target_t *target, tsr_vec2_t pos, int radius) {
-//     CCASSERT(target);
-//
-// }
-//
+void tsr_box(tsr_target_t *target, const tsr_rect_t *rect, int thickness) {
+    CCASSERT(target);
+    if(!target->color.a) return;
+    uint8_t *pixels = target->surface->pixels;
+
+    uint8_t basic[4] = {255, 255, 255, 255};
+
+    const tsr_vec2_t start = tsr_add_vv(target->position, rect->origin);
+    const tsr_vec2_t end = tsr_add_vv(start, rect->size);
+    const tsr_vec2_t vp_size = target->surface->size;
+
+    for(int x = max_i32(start.x, 0); x < min_i32(end.x, vp_size.x); ++x) {
+        for(int y = max_i32(start.y, 0); y < min_i32(end.y, vp_size.y); ++y) {
+            if(x >= start.x + thickness && x < end.x - thickness &&
+               y >= start.y + thickness && y < end.y - thickness) continue;
+            uint32_t i = y * target->surface->size.x + x;
+            blend(&target->color, basic, pixels + i * 4);
+        }
+    }
+}
+
+void tsr_vline(tsr_target_t *target, int x, int y1, int y2, int thickness) {
+    CCASSERT(target);
+    tsr_rect_t box = {
+        .origin = { x - thickness/2, min_i32(y1, y2) },
+        .size = {thickness, abs(y2 - y1) }
+    };
+    tsr_fill_box(target, &box);
+}
+
+void tsr_hline(tsr_target_t *target, int y, int x1, int x2, int thickness) {
+    CCASSERT(target);
+    tsr_rect_t box = {
+        .origin = { min_i32(x1, x2), y - thickness/2 },
+        .size = { abs(x2 - x1), thickness }
+    };
+    tsr_fill_box(target, &box);
+}
+
 void tsr_blit(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos) {
     CCASSERT(target);
     CCASSERT(img);
