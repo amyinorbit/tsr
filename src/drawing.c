@@ -54,15 +54,15 @@ static inline void blend(const tsr_colorf_t *col, const uint8_t *src, uint8_t *d
     dst[3] = 255 * clamp_f32(src_a + dst_a * one_minus_src_a, 0, 1.0);
 }
 
-void tsr_fill_box(tsr_target_t *target, const tsr_rect_t *rect) {
+void tsr_fill_box(tsr_target_t *target, int width, int height) {
     CCASSERT(target);
     if(!target->color.a) return;
     uint8_t *pixels = target->surface->pixels;
 
     uint8_t basic[4] = {255, 255, 255, 255};
 
-    const tsr_vec2_t start = tsr_add_vv(target->position, rect->origin);
-    const tsr_vec2_t end = tsr_add_vv(start, rect->size);
+    const tsr_vec2_t start = target->position;
+    const tsr_vec2_t end = tsr_add_vv(start, tsr_vec2(height, width));
     const tsr_vec2_t vp_size = target->surface->size;
 
     for(int x = max_i32(start.x, 0); x < min_i32(end.x, vp_size.x); ++x) {
@@ -73,15 +73,15 @@ void tsr_fill_box(tsr_target_t *target, const tsr_rect_t *rect) {
     }
 }
 
-void tsr_box(tsr_target_t *target, const tsr_rect_t *rect, int thickness) {
+void tsr_box(tsr_target_t *target, int width, int height, int thickness) {
     CCASSERT(target);
     if(!target->color.a) return;
     uint8_t *pixels = target->surface->pixels;
 
     uint8_t basic[4] = {255, 255, 255, 255};
 
-    const tsr_vec2_t start = tsr_add_vv(target->position, rect->origin);
-    const tsr_vec2_t end = tsr_add_vv(start, rect->size);
+    const tsr_vec2_t start = tsr_add_vv(target->position, tsr_vec2(width, height));
+    const tsr_vec2_t end = tsr_add_vv(start, tsr_vec2(width, height));
     const tsr_vec2_t vp_size = target->surface->size;
 
     for(int x = max_i32(start.x, 0); x < min_i32(end.x, vp_size.x); ++x) {
@@ -94,22 +94,18 @@ void tsr_box(tsr_target_t *target, const tsr_rect_t *rect, int thickness) {
     }
 }
 
-void tsr_vline(tsr_target_t *target, int x, int y1, int y2, int thickness) {
+void tsr_vline(tsr_target_t *target, int length, int thickness) {
     CCASSERT(target);
-    tsr_rect_t box = {
-        .origin = { x - thickness/2, min_i32(y1, y2) },
-        .size = {thickness, abs(y2 - y1) }
-    };
-    tsr_fill_box(target, &box);
+    tsr_translate(target, -thickness/2, 0);
+    tsr_fill_box(target, thickness, length);
+    tsr_translate(target, thickness/2, 0);
 }
 
-void tsr_hline(tsr_target_t *target, int y, int x1, int x2, int thickness) {
+void tsr_hline(tsr_target_t *target, int length, int thickness) {
     CCASSERT(target);
-    tsr_rect_t box = {
-        .origin = { min_i32(x1, x2), y - thickness/2 },
-        .size = { abs(x2 - x1), thickness }
-    };
-    tsr_fill_box(target, &box);
+    tsr_translate(target, 0, -thickness/2);
+    tsr_fill_box(target, length, thickness);
+    tsr_translate(target, 0, thickness/2);
 }
 
 void tsr_blit(tsr_target_t *target, tsr_surface_t *img, tsr_vec2_t pos) {

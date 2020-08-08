@@ -58,6 +58,7 @@ int main() {
     tsr_blit_ex(target, font, tsr_vec2(20, 20), &character);
 
     tsr_rect_t test = tsr_rect(tsr_vec2(50, 50), tsr_vec2(100, 50));
+    // tsr_move_to(target, 50, 50);
     tsr_box(target, &test, 1);
 
     tsr_vline(target, 100, 30, 80, 4);
