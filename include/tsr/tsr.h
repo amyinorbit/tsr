@@ -24,6 +24,8 @@ typedef enum tsr_blend_mode_e {
 void tsr_blend(tsr_target_t *target, tsr_blend_mode_t mode);
 void tsr_color(tsr_target_t *target, float r, float g, float b, float a);
 void tsr_translate(tsr_target_t *target, int x, int y);
+void tsr_move_to(tsr_target_t *target, int x, int y);
+
 void tsr_clear(tsr_target_t *target);
 void tsr_fill_box(tsr_target_t *target, int width, int height);
 void tsr_box(tsr_target_t *target, int width, int height, int thickness);
