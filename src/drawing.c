@@ -85,7 +85,7 @@ void tsr_box(tsr_target_t *target, int width, int height, int thickness) {
 
     uint8_t basic[4] = {255, 255, 255, 255};
 
-    const tsr_vec2_t start = tsr_add_vv(target->position, tsr_vec2(width, height));
+    const tsr_vec2_t start = target->position;
     const tsr_vec2_t end = tsr_add_vv(start, tsr_vec2(width, height));
     const tsr_vec2_t vp_size = target->surface->size;
 

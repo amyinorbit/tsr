@@ -57,13 +57,15 @@ int main() {
     tsr_color(target, 1, 0, 1, 1);
     tsr_blit_ex(target, font, tsr_vec2(20, 20), &character);
 
-    tsr_rect_t test = tsr_rect(tsr_vec2(50, 50), tsr_vec2(100, 50));
-    // tsr_move_to(target, 50, 50);
-    tsr_box(target, &test, 1);
+    tsr_move_to(target, 50, 50);
+    tsr_box(target, 100, 50, 1);
 
-    tsr_vline(target, 100, 30, 80, 4);
+    tsr_move_to(target, 100, 30);
+    tsr_vline(target, 50, 4);
+
     tsr_color(target, 0.f, 1.f, 1.f, 0.5f);
-    tsr_hline(target, 100, 30, 80, 4);
+    tsr_move_to(target, 100, 30);
+    tsr_hline(target, 50, 1);
 
     debug_tsr(buffer);
 
