@@ -26,6 +26,11 @@ void tsr_translate(tsr_target_t *target, int x, int y) {
     target->position = tsr_add_vv(target->position, tsr_vec2(x, y));
 }
 
+void tsr_move_to(tsr_target_t *target, int x, int y) {
+    CCASSERT(target);
+    target->position = tsr_vec2(x, y);
+}
+
 void tsr_clear(tsr_target_t *target) {
     CCASSERT(target);
     uint8_t *pixels = target->surface->pixels;
