@@ -18,7 +18,6 @@ extern "C" {
 typedef enum tsr_blend_mode_e {
     TSR_BLEND_BLEND,
     TSR_BLEND_REPLACE,
-    TSR_BLEND_ADD,
 } tsr_blend_mode_t;
 
 void tsr_blend(tsr_target_t *target, tsr_blend_mode_t mode);
